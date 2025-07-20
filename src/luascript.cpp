@@ -1490,6 +1490,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_PLURALNAME)
 	registerEnum(ITEM_ATTRIBUTE_WEIGHT)
 	registerEnum(ITEM_ATTRIBUTE_ATTACK)
+	registerEnum(ITEM_ATTRIBUTE_BALANCE)
 	registerEnum(ITEM_ATTRIBUTE_DEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_EXTRADEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_ARMOR)
@@ -2695,6 +2696,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getShootRange", LuaScriptInterface::luaItemTypeGetShootRange);
 
 	registerMethod("ItemType", "getAttack", LuaScriptInterface::luaItemTypeGetAttack);
+	registerMethod("ItemType", "getBalance", LuaScriptInterface::luaItemTypeGetBalance);
 	registerMethod("ItemType", "getAttackSpeed", LuaScriptInterface::luaItemTypeGetAttackSpeed);
 	registerMethod("ItemType", "getDefense", LuaScriptInterface::luaItemTypeGetDefense);
 	registerMethod("ItemType", "getExtraDefense", LuaScriptInterface::luaItemTypeGetExtraDefense);
@@ -12078,6 +12080,19 @@ int LuaScriptInterface::luaItemTypeGetAttack(lua_State* L)
 	if (itemType) {
 		lua_pushnumber(L, itemType->attack);
 	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetBalance(lua_State* L)
+{
+	// itemType:getBalance()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->balance);
+	}
+	else {
 		lua_pushnil(L);
 	}
 	return 1;

@@ -959,7 +959,9 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_WEIGHT;
 	} else if (str == "attack") {
 		return ITEM_ATTRIBUTE_ATTACK;
-	} else if (str == "defense") {
+	}else if (str == "balance") {
+		return ITEM_ATTRIBUTE_BALANCE;
+	}else if (str == "defense") {
 		return ITEM_ATTRIBUTE_DEFENSE;
 	} else if (str == "extradefense") {
 		return ITEM_ATTRIBUTE_EXTRADEFENSE;

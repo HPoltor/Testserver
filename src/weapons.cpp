@@ -136,6 +136,10 @@ int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t
 {
 	return static_cast<int32_t>(std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
 }
+int32_t Weapons::getMinWeaponDamage(uint32_t balance, int32_t maxdamage)
+{
+	return static_cast<int32_t>(std::round(maxdamage*balance/100));
+}
 
 bool Weapon::configureEvent(const pugi::xml_node& node)
 {
@@ -591,14 +595,16 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 {
 	int32_t attackSkill = player->getWeaponSkill(item);
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
+	int32_t balanceValue = std::max<int32_t>(0, item->getBalance());
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->meleeDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}
+	int32_t minValue = static_cast<int32_t>(Weapons::getMinWeaponDamage(balanceValue, maxValue) * player->getVocation()->meleeDamageMultiplier);
 
-	return -normal_random(0, maxValue);
+	return -normal_random(minValue, maxValue);
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* interface) :
@@ -817,11 +823,13 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackValue = item->getAttack();
+	int32_t balanceValue= item->getBalance();
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
 		Item* weapon = player->getWeapon(true);
 		if (weapon) {
 			attackValue += weapon->getAttack();
+			balanceValue += weapon->getBalance();
 		}
 	}
 
@@ -834,15 +842,17 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	}
 
 	int32_t minValue;
+
 	if (target) {
 		if (target->getPlayer()) {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
+			minValue = static_cast<int32_t>(Weapons::getMinWeaponDamage(balanceValue/2, maxValue) * player->getVocation()->distDamageMultiplier);
 		} else {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
+			minValue = static_cast<int32_t>(Weapons::getMinWeaponDamage(balanceValue, maxValue) * player->getVocation()->distDamageMultiplier);
 		}
 	} else {
 		minValue = 0;
 	}
+
 	return -normal_random(minValue, maxValue);
 }
 

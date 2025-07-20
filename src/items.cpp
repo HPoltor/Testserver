@@ -23,6 +23,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"defense", ITEM_PARSE_DEFENSE},
 	{"extradef", ITEM_PARSE_EXTRADEF},
 	{"attack", ITEM_PARSE_ATTACK},
+	{"balance", ITEM_PARSE_BALANCE},
 	{"attackspeed", ITEM_PARSE_ATTACK_SPEED},
 	{"rotateto", ITEM_PARSE_ROTATETO},
 	{"moveable", ITEM_PARSE_MOVEABLE},
@@ -628,6 +629,10 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ATTACK: {
 					it.attack = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+				case ITEM_PARSE_BALANCE: {
+					it.balance = pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 

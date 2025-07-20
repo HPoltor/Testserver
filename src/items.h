@@ -51,6 +51,7 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_DEFENSE,
 	ITEM_PARSE_EXTRADEF,
 	ITEM_PARSE_ATTACK,
+	ITEM_PARSE_BALANCE,
 	ITEM_PARSE_ATTACK_SPEED,
 	ITEM_PARSE_ROTATETO,
 	ITEM_PARSE_MOVEABLE,
@@ -308,6 +309,7 @@ class ItemType
 		int32_t maxHitChance = -1;
 		int32_t decayTo = -1;
 		int32_t attack = 0;
+		int32_t balance = 0;
 		int32_t defense = 0;
 		int32_t extraDefense = 0;
 		int32_t armor = 0;
